@@ -1,0 +1,44 @@
+# Ignoriere Kompilierungsdateien und Binärdateien
+*.exe
+*.out
+*.dll
+*.so
+*.dylib
+
+# Ignoriere Archivdateien
+*.zip
+*.rar
+*.gz
+*.tar
+
+# Ignoriere IDE- und Texteditor-spezifische Dateien
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+*.tmp
+
+# Ignoriere System- und temporäre Dateien
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Ignoriere Konfigurationsdateien, die lokal sein sollten
+config.local.php
+config.ini.local
+
+# Ignoriere Log- und Debug-Dateien
+*.log
+npm-debug.log*
+
+# Ignoriere temporäre Verzeichnisse
+node_modules/
+temp/
+env
+bun.lockb
