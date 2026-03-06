@@ -42,3 +42,5 @@ node_modules/
 temp/
 env
 bun.lockb
+
+.env
