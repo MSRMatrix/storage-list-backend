@@ -25,7 +25,8 @@
   "contributors": [],
   "scripts": {
     "dev": "",
-    "test": ""
+    "test": "",
+    "start": "bun server.js"
   },
   "dependencies": {
     "cookie-parser": "^1.4.6",
