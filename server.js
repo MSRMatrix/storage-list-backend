@@ -12,9 +12,10 @@ import { errorHandler } from "./middlewares/errorHandler"
 const app = express();
 const PORT = process.env.PORT || 500;
 const MONGO_DB_URI = process.env.MONGO_DB_URI || 'mongodb://localhost:27017';
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173"
 
 app.use(morgan(`dev`));
-app.use(cors());
+app.use(cors({origin: FRONTEND_URL, credentials: true}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
