@@ -4,7 +4,7 @@ export const createPart = async (req, res, next) => {
   try {
     const { partNumber, name, quantity, price, lowLimit, description } =
       req.body;
-
+console.log("test");
     const newPart = new Part({
       partNumber,
       name,
