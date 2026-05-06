@@ -6,6 +6,6 @@ import { userValidator, validateRequest } from "../middlewares/validator/validat
 const router = express.Router()
 
 router
-.route("/create").post(uservalidator, validateRequest, createUser)
+.route("/create").post(userValidator, validateRequest, createUser)
 
 export default router;
