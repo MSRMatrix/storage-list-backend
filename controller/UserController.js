@@ -4,6 +4,11 @@ export const createUser = async (req, res, next) => {
   try {
     const { username, email, password, createdAt, company, currency, deleted } =
       req.body;
+
+   if (await User.findOne({ email: email })) {
+      return res.status(404).json({ message: "Email already exist!" });
+    }
+
     const newUser = new User({
       username: username,
       email: email,
