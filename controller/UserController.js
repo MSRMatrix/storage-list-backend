@@ -55,3 +55,34 @@ export const login = async (req, res, next) => {
     next(error);
   }
 };
+
+export const logout = async (req, res, next) => {
+  try {
+    res
+      .clearCookie("jwt", {
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+      })
+      .status(200)
+      .send("User logged out");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getData = async (req, res, next) => {
+  try {
+    const data = await dataFunction(req, res, next);
+
+    if (!data) {
+      const error = new Error("Account not found");
+      error.statusCode = 404;
+      throw error;
+    }
+
+    res.status(200).send(data);
+  } catch (error) {
+    next(error);
+  }
+};
