@@ -53,8 +53,7 @@ export const login = async (req, res, next) => {
       secure: true,
     });
 
-console.log(token);
-  return  res.status(200).json({ searchEmail, token });
+  return  res.status(200).json({ userData: searchEmail, token });
   } catch (error) {
     next(error);
   }
