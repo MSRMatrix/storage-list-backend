@@ -4,9 +4,10 @@ import User from "../models/User";
 
 export const createUser = async (req, res, next) => {
   try {
-    const { username, email, password, createdAt, company, currency, deleted } = req.body;
+ const partsData = req.body.parts || [];
+ const { username, email, password, createdAt, company, currency, deleted } = req.body.user;
 
-    const newUser = new User({
+const newUser = new User({
       username: username || "Nicht verfügbar",
       email: email,
       password: await hashPassword(password),
@@ -16,9 +17,21 @@ export const createUser = async (req, res, next) => {
       deleted: false,
     });
 
-    await newUser.save();
-    
-    res.status(200).json({ data: newUser, message: "User created" });
+await newUser.save();
+
+if (partsData.length > 0) {
+  await Part.insertMany(
+    partsData.map((part) => ({
+      ...part,
+      userId: newUser._id,
+    }))
+  );
+}
+
+return res.status(200).json({
+  data: newUser,
+  message: "User created",
+});
   } catch (error) {
     next(error);
   }
@@ -52,6 +65,8 @@ export const login = async (req, res, next) => {
       sameSite: "none",
       secure: true,
     });
+
+    // Function um falls bestehende Teile zu löschen die keine User ID haben
 
   return  res.status(200).json({ userData: searchEmail, token });
   } catch (error) {

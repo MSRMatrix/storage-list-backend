@@ -21,7 +21,6 @@ const PartSchema = new Schema(
 PartSchema.methods.toJSON = function () {
   const part = this.toObject();
   delete part._id;
-  delete part.deleted;
   return part;
 };
 

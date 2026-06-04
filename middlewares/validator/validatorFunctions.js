@@ -2,7 +2,8 @@ import { validationResult, body } from "express-validator";
 
 export const validateRequest = (req, res, next) => {
   
-  const result = validationResult(req);
+  const result = validationResult(req.body.user);
+  // Überprüfen weil es standartmässig req war und nicht req.body.user
   if (result.isEmpty()) {
     return next();
   }
