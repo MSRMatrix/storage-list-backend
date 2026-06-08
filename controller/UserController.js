@@ -1,5 +1,6 @@
 import { issueJwt } from "../helpers/jwt";
 import { comparePassword, hashPassword } from "../middlewares/hashPassword";
+import Part from "../models/Part";
 import User from "../models/User";
 
 export const createUser = async (req, res, next) => {
@@ -18,6 +19,8 @@ const newUser = new User({
     });
 
 await newUser.save();
+
+
 
 if (partsData.length > 0) {
   await Part.insertMany(
