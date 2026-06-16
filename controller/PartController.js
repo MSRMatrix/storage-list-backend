@@ -14,7 +14,7 @@ export const createPart = async (req, res, next) => {
       userId: req.user.id,
     });
 
-    res.status(200).json({ data: newPart, message: "Part created" });
+    res.status(200).json({ newPart: newPart, message: "Part created" });
   } catch (error) {
     next(error);
   }

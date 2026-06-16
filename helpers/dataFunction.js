@@ -14,6 +14,7 @@ export async function dataFunction(req, res, next){
   
       const userId = decodedToken.id;
       const data = await User.findOne({ _id: userId });
+      // Function fehlt um alle Parts rauszufiltern
   
       return data;
   }
