@@ -1,21 +1,11 @@
-import jwt from "jsonwebtoken";
 import User from "../models/User";
-const secretKey = process.env.JWT_SECRET;
+import Part from "../models/Part";
 
-export async function dataFunction(req, res, next){
-    const token = req.cookies.jwt;
-  
-      if (!token) {
-        const error = new Error("Token not found");
-        error.statusCode = 401;
-        throw error;
-      }
-      const decodedToken = jwt.verify(token, secretKey);
-  
-      const userId = decodedToken.id;
-      const data = await User.findOne({ _id: userId });
-      // Function fehlt um alle Parts rauszufiltern
-  
-      return data;
-  }
-  
+export const dataFunction = async (userId) => {
+  const user = await User.findById(userId);
+  const parts = await Part.find({ userId });
+
+  if (!user) return null;
+
+  return { user, parts };
+};

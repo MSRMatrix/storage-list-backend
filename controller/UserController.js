@@ -5,14 +5,14 @@ import User from "../models/User";
 
 export const getData = async (req, res, next) => {
   try {
-    const data = await dataFunction(req, res, next);
+    const data = await dataFunction(req.user.id);
+
     if (!data) {
-      const error = new Error("Account not found");
-      error.statusCode = 404;
-      throw error;
+      return res.status(404).json({ message: "Account not found" });
     }
 
-    res.status(200).json({user: data.user, parts: data.parts});
+    return res.status(200).json({user: data.user, parts: data.parts});
+
   } catch (error) {
     next(error);
   }
