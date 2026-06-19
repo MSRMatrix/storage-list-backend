@@ -1,3 +1,4 @@
+import { dataFunction } from "../helpers/dataFunction";
 import { issueJwt } from "../helpers/jwt";
 import { comparePassword, hashPassword } from "../middlewares/hashPassword";
 import Part from "../models/Part";
@@ -5,14 +6,16 @@ import User from "../models/User";
 
 export const getData = async (req, res, next) => {
   try {
-    const data = await dataFunction(req.user.id);
+    const data = await dataFunction(req, res, next);
 
     if (!data) {
-      return res.status(404).json({ message: "Account not found" });
+      return res.status(404).json({ message: "Data not found" });
     }
 
-    return res.status(200).json({user: data.user, parts: data.parts});
-
+    res.status(200).json({
+      user: data.user,
+      parts: data.parts,
+    });
   } catch (error) {
     next(error);
   }
