@@ -4,6 +4,7 @@ const Database = process.env.DATABASE;
 
 const PartStorageDb = mongoose.connection.useDb(Database);
 
+// Schema muss verändert werden wie partNumber unique und mehr vielleicht
 const PartSchema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },

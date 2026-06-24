@@ -34,11 +34,6 @@ export const userValidator = [
     .escape(),
 ];
 
-export const timelogValidator = [
-  
-];
-
-
 export const userUpdateValidator = (fieldsToUpdate) => {
   const validators = [];
 
