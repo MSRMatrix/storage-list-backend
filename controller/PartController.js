@@ -35,3 +35,32 @@ export const getData = async (req, res, next) => {
     next(error);
   }
 };
+
+export const softDelete = async (req, res, next) => {
+  try {
+
+    const userData = await dataFunction(req, res, next);
+
+    const deletePart = await Part.findByIdAndUpdate(
+      req.body._id,
+      { deleted: true }
+    );
+
+    if (!deletePart) {
+      return res.status(404).json({
+        message: "Part not found",
+      });
+    }
+
+    await newPart.save();
+
+    const parts = await Part.find({userId:  userData.user._id})
+
+    res.status(200).json({
+      message: "Part deleted!",
+      parts: parts,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

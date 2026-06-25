@@ -7,12 +7,10 @@ import User from "../models/User";
 export const getData = async (req, res, next) => {
   try {
     const data = await dataFunction(req, res, next);
-
     if (!data) {
       return res.status(404).json({ message: "Data not found" });
     }
-
-    res.status(200).json({
+   return res.status(200).json({
       user: data.user,
       parts: data.parts,
     });
