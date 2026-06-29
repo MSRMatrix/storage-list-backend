@@ -29,6 +29,7 @@ export const createPart = async (req, res, next) => {
 
 export const editPart = async (req, res, next) => {
   try {
+    // Muss in Route eingefügt werden
     const {
       _id,
       partNumber,
