@@ -14,6 +14,7 @@ const PartSchema = new Schema(
     price: { type: Number, required: true },
     lowLimit: { type: Number, required: true },
     description: { type: String, default: "No description" },
+    img: { type: String },
     deleted: { type: Boolean, default: false },
   },
   { versionKey: false, strictQuery: true },
@@ -21,6 +22,7 @@ const PartSchema = new Schema(
 
 PartSchema.methods.toJSON = function () {
   const part = this.toObject();
+   delete part.userId;
   return part;
 };
 
