@@ -77,16 +77,17 @@ export const login = async (req, res, next) => {
 
     const token = issueJwt(searchEmail);
 
-    const data = await dataFunction(req, res, next);
+    
     res.cookie("jwt", token, {
       httpOnly: true,
       sameSite: "none",
       secure: true,
     });
-
+    // const data = await dataFunction(req, res, next);
     // Function um falls bestehende Teile zu löschen die keine User ID haben
 
-    return res.status(200).json({ data: data, token });
+    // return res.status(200).json({ data: data, token });
+    return res.status(200).json({  token });
   } catch (error) {
     next(error);
   }
