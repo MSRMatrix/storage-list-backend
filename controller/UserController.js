@@ -10,7 +10,7 @@ export const getData = async (req, res, next) => {
     if (!data) {
       return res.status(404).json({ message: "Data not found" });
     }
-   return res.status(200).json({
+    return res.status(200).json({
       user: data.user,
       parts: data.parts,
     });
@@ -74,10 +74,8 @@ export const login = async (req, res, next) => {
       return res.status(404).json({ message });
     }
 
-
     const token = issueJwt(searchEmail);
 
-    
     res.cookie("jwt", token, {
       httpOnly: true,
       sameSite: "none",
@@ -87,7 +85,7 @@ export const login = async (req, res, next) => {
     // Function um falls bestehende Teile zu löschen die keine User ID haben
 
     // return res.status(200).json({ data: data, token });
-    return res.status(200).json({  token });
+    return res.status(200).json({ token });
   } catch (error) {
     next(error);
   }
@@ -103,6 +101,33 @@ export const logout = async (req, res, next) => {
       })
       .status(200)
       .send("User logged out");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteAccount = async (req, res, next) => {
+  try {
+    const userData = await dataFunction(req, res, next);
+
+    // If-else einbauen um zu checken ob der User sein Passwort selbst eingeben kann
+
+    await Part.deleteMany({
+      userId: userData.user._id,
+    });
+
+    await User.findByIdAndDelete(userData.user._id);
+
+    return res
+      .clearCookie("jwt", {
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+      })
+      .status(200)
+      .json({
+        message: "Account deleted successfully",
+      });
   } catch (error) {
     next(error);
   }

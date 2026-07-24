@@ -1,5 +1,5 @@
 import express from "express"
-import { createUser, getData, login, logout } from "../controller/UserController";
+import { createUser, deleteAccount, getData, login, logout } from "../controller/UserController";
 import { userValidator, validateRequest } from "../middlewares/validator/validatorFunctions";
 
 
@@ -16,6 +16,9 @@ router
 
 router
 .route("/logout").post(logout)
+
+router
+.route("/delete-account").post(deleteAccount)
 
 
 export default router;

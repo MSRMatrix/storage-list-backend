@@ -1,5 +1,5 @@
 import express from "express"
-import { createPart, editPart, softDelete } from "../controller/PartController";
+import { createPart, editPart, hardDelete, softDelete } from "../controller/PartController";
 
 
 const router = express.Router()
@@ -12,5 +12,9 @@ router
 
 router
 .route("/soft-delete").post(softDelete)
+
+router
+.route("/hard-delete").post(hardDelete)
+
 
 export default router;

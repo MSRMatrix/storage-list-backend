@@ -129,3 +129,21 @@ export const softDelete = async (req, res, next) => {
     next(error);
   }
 };
+
+export const hardDelete = async (req, res, next) => {
+  try {
+
+   const userData = await dataFunction(req, res, next);
+
+await Part.deleteMany({
+  userId: userData.user._id,
+});
+
+res.status(200).json({
+  message: "All parts deleted!",
+  parts,
+});
+  } catch (error) {
+    next(error);
+  }
+};
