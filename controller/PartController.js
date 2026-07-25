@@ -103,7 +103,6 @@ export const getData = async (req, res, next) => {
 
 export const softDelete = async (req, res, next) => {
   try {
-
     const userData = await dataFunction(req, res, next);
 
     const deletePart = await Part.findByIdAndUpdate(
@@ -131,6 +130,7 @@ export const softDelete = async (req, res, next) => {
 };
 
 export const hardDelete = async (req, res, next) => {
+  console.log("test");
   try {
 
    const userData = await dataFunction(req, res, next);
@@ -141,7 +141,6 @@ await Part.deleteMany({
 
 res.status(200).json({
   message: "All parts deleted!",
-  parts,
 });
   } catch (error) {
     next(error);

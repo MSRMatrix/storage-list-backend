@@ -115,6 +115,7 @@ export const deleteAccount = async (req, res, next) => {
     await Part.deleteMany({
       userId: userData.user._id,
     });
+    console.log(userData);
 
     await User.findByIdAndDelete(userData.user._id);
 

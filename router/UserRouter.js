@@ -18,7 +18,7 @@ router
 .route("/logout").post(logout)
 
 router
-.route("/delete-account").post(deleteAccount)
+.route("/delete-account").delete(deleteAccount)
 
 
 export default router;

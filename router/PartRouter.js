@@ -11,10 +11,10 @@ router
 .route("/edit").patch(editPart)
 
 router
-.route("/soft-delete").post(softDelete)
+.route("/soft-delete").delete(softDelete)
 
 router
-.route("/hard-delete").post(hardDelete)
+.route("/hard-delete").delete(hardDelete)
 
 
 export default router;
