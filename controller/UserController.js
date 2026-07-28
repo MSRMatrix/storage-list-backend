@@ -36,7 +36,7 @@ export const createUser = async (req, res, next) => {
     });
 
     await newUser.save();
-
+    
     if (partsData.length > 0) {
       await Part.insertMany(
         partsData.map((part) => ({
@@ -51,6 +51,7 @@ export const createUser = async (req, res, next) => {
       message: "User created",
     });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
@@ -115,7 +116,6 @@ export const deleteAccount = async (req, res, next) => {
     await Part.deleteMany({
       userId: userData.user._id,
     });
-    console.log(userData);
 
     await User.findByIdAndDelete(userData.user._id);
 
