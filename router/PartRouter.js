@@ -1,5 +1,5 @@
 import express from "express"
-import { createPart, editPart, hardDelete, softDelete } from "../controller/PartController";
+import { createPart, editPart, hardDelete, softDelete, transferData } from "../controller/PartController";
 
 
 const router = express.Router()
@@ -9,6 +9,9 @@ router
 
 router
 .route("/edit").patch(editPart)
+
+router
+.route("/transfer").put(transferData)
 
 router
 .route("/soft-delete").delete(softDelete)
