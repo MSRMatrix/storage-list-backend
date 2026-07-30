@@ -3,7 +3,7 @@ import { validationResult, body } from "express-validator";
 export const validateRequest = (req, res, next) => {
   
   const result = validationResult(req.body.user);
-  // Überprüfen weil es standartmässig req war und nicht req.body.user
+  // Überprüfen weil es standartmässig req war und nicht req.body.user (Ein If else einbauen um zwischen parts und user zu unterscheiden)
   if (result.isEmpty()) {
     return next();
   }
@@ -39,8 +39,7 @@ export const userUpdateValidator = (fieldsToUpdate) => {
 
   if (fieldsToUpdate.includes("password")) {
     validators.push(
-      body("password")
-        .if(body("password").exists({ checkFalsy: true }))
+      body("user.password")
         .trim()
         .isStrongPassword()
         .withMessage("Das Passwort ist nicht stark genug.")
@@ -52,8 +51,7 @@ export const userUpdateValidator = (fieldsToUpdate) => {
 
   if (fieldsToUpdate.includes("email")) {
     validators.push(
-      body("email")
-        .if(body("email").exists({ checkFalsy: true }))
+      body("user.email")
         .trim()
         .isEmail()
         .withMessage("Die angegebene E-Mail-Adresse ist nicht gültig.")
@@ -62,10 +60,36 @@ export const userUpdateValidator = (fieldsToUpdate) => {
     );
   }
 
+  if (fieldsToUpdate.includes("username")) {
+    validators.push(
+      body("user.username")
+        .trim()
+        .isLength({ min: 3 })
+        .withMessage("Der Benutzername muss mindestens 3 Zeichen lang sein.")
+        .escape()
+    );
+  }
+
+  if (fieldsToUpdate.includes("currency")) {
+    validators.push(
+      body("user.currency")
+        .isIn(["Euro", "Dollar"])
+        .withMessage("Ungültige Währung.")
+    );
+  }
+
+  if (fieldsToUpdate.includes("company")) {
+    validators.push(
+      body("user.company")
+        .isBoolean()
+        .withMessage("Company muss true oder false sein.")
+    );
+  }
+
   return validators;
 };
 
-// export const timeLogUpdateValidator = (fieldsToUpdate) => {
+// export const partsUpdateValidator = (fieldsToUpdate) => {
 //   const validators = [];
 
 //   return validators;

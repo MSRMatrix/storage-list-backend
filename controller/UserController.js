@@ -36,7 +36,7 @@ export const createUser = async (req, res, next) => {
     });
 
     await newUser.save();
-    
+
     if (partsData.length > 0) {
       await Part.insertMany(
         partsData.map((part) => ({
@@ -52,6 +52,49 @@ export const createUser = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
+    next(error);
+  }
+};
+
+export const editUser = async (req, res, next) => {
+  try {
+    const userData = await dataFunction(req, res, next);
+
+    const { username, email, password, company, currency } = req.body.user;
+
+    const updateData = {};
+
+    if (username) {
+      updateData.username = username;
+    }
+
+    if (email) {
+      updateData.email = email;
+    }
+
+    if (password) {
+      updateData.password = await hashPassword(password);
+    }
+
+    if (typeof company === "boolean") {
+      updateData.company = company;
+    }
+
+    if (currency) {
+      updateData.currency = currency;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userData.user._id,
+      updateData,
+      { new: true },
+    );
+
+    return res.status(200).json({
+      data: updatedUser,
+      message: "User updated",
+    });
+  } catch (error) {
     next(error);
   }
 };
