@@ -13,18 +13,22 @@ const UserSchema = new Schema(
     company: { type: Boolean, default: false },
     currency: { type: String, default: "Euro" },
     deleted: { type: Boolean, default: false },
+    twoFactorEnabled: { type: Boolean, default: false, },
+    twoFactorSecret: { type: String, default: null, },
   },
   { versionKey: false, strictQuery: true },
 );
 
 UserSchema.methods.toJSON = function () {
   const user = this.toObject();
+
   delete user.password;
+  delete user.twoFactorSecret;
   delete user._id;
   delete user.deleted;
+
   return user;
 };
-
 const User = PartStorageDb.model("User", UserSchema);
 
 export default User;
