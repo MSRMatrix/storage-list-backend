@@ -46,6 +46,8 @@ export const createUser = async (req, res, next) => {
       );
     }
 
+    await sendEmail(searchEmail.email, "User created!", `You can now log in!`);
+
     return res.status(200).json({
       data: newUser,
       message: "User created",
@@ -90,6 +92,14 @@ export const editUser = async (req, res, next) => {
       { new: true },
     );
 
+    if (user.emailNotifications) {
+      await sendEmail(
+        searchEmail.email,
+        "User updated!",
+        `Check your new updates!`,
+      );
+    }
+
     return res.status(200).json({
       data: updatedUser,
       message: "User updated",
@@ -131,7 +141,11 @@ export const login = async (req, res, next) => {
 
       await searchEmail.save();
 
-      await sendTwoFactorMail(searchEmail.email, code);
+      await sendEmail(
+        searchEmail.email,
+        "Your login code",
+        `Your login code is: ${code}`,
+      );
 
       return res.status(200).json({
         message: "Two factor code sent",
@@ -148,6 +162,10 @@ export const login = async (req, res, next) => {
     // Function um falls bestehende Teile zu löschen die keine User ID haben
 
     // return res.status(200).json({ data: data, token });
+
+    if (user.emailNotifications) {
+      await sendEmail(searchEmail.email, "Login!", `You are now logged in!`);
+    }
 
     res.cookie("jwt", token, {
       httpOnly: true,
@@ -166,6 +184,10 @@ export const login = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
   try {
+    if (user.emailNotifications) {
+      await sendEmail(searchEmail.email, "Logout!", `You are now logged out!`);
+    }
+
     res
       .clearCookie("jwt", {
         httpOnly: true,
@@ -191,6 +213,14 @@ export const deleteAccount = async (req, res, next) => {
 
     await User.findByIdAndDelete(userData.user._id);
 
+    if (user.emailNotifications) {
+      await sendEmail(
+        searchEmail.email,
+        "Account deleted!",
+        `Hope to see you soon again:)!`,
+      );
+    }
+
     return res
       .clearCookie("jwt", {
         httpOnly: true,
@@ -208,9 +238,20 @@ export const deleteAccount = async (req, res, next) => {
 
 export const twoFactor = async (req, res, next) => {
   try {
-    const { userId, code } = req.body;
+    const { userId } = req.body;
 
     const user = await User.findById(userId);
+
+    const passwordCompare = await comparePassword(
+      password,
+      searchEmail.password,
+    );
+
+    if (!passwordCompare) {
+      return res.status(401).json({
+        message: "Passwort stimmt nicht!",
+      });
+    }
 
     if (!user) {
       return res.status(404).json({
@@ -248,11 +289,36 @@ export const twoFactor = async (req, res, next) => {
   }
 };
 
-export async function sendTwoFactorMail(email, code) {
+export async function sendEmail(email, topic, text) {
   await transporter.sendMail({
     from: process.env.GMAIL_UN,
     to: email,
-    subject: "Your login code",
-    text: `Your login code is: ${code}`,
+    subject: topic,
+    text: text,
   });
 }
+
+export const emailAlerts = async (req, res, next) => {
+  try {
+    const userData = await dataFunction(req, res, next);
+
+    const user = await User.findById(userData.user._id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    user.emailNotifications = !user.emailNotifications;
+
+    await user.save();
+
+    return res.status(200).json({
+      message: `Email notifications ${user.emailNotifications ? "enabled" : "disabled"}`,
+      emailNotifications: user.emailNotifications,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

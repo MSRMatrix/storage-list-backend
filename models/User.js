@@ -13,8 +13,9 @@ const UserSchema = new Schema(
     company: { type: Boolean, default: false },
     currency: { type: String, default: "Euro" },
     deleted: { type: Boolean, default: false },
-    twoFactorEnabled: { type: Boolean, default: false, },
-    twoFactorSecret: { type: String, default: null, },
+    twoFactorEnabled: { type: Boolean, default: false },
+    twoFactorSecret: { type: String, default: null },
+    emailNotifications: { type: Boolean, default: true, },
   },
   { versionKey: false, strictQuery: true },
 );
